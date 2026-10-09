@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HairPrice — узнай стоимость своего волоса по числу подписчиков</title>
+<meta name="description" content="Введи название YouTube-канала и количество подписчиков — узнай, за сколько люди готовы купить твой волос. Шуточный калькулятор для стримеров и блогеров." />
+<meta name="theme-color" content="#5c71e5" />
+<link rel="canonical" href="https://example.com/" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="HairPrice — калькулятор стоимости волоса" />
+<meta property="og:description" content="Узнай, за сколько люди готовы купить твой волос, исходя из подписчиков канала." />
+<meta property="og:image" content="https://example.com/og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --primary: #5c71e5;
+    --primary-dark: #4658c4;
+    --primary-light: #8b9af0;
+    --bg-1: #0f1226;
+    --bg-2: #1a1f3d;
+    --text: #f5f6ff;
+    --text-muted: #b9bfe0;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --radius: 18px;
+    --radius-sm: 12px;
+    --transition: 0.3s ease;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(92, 113, 229, 0.35), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(139, 154, 240, 0.28), transparent 50%),
+      linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+    animation: float 14s ease-in-out infinite;
+  }
+  body::before {
+    width: 380px; height: 380px;
+    background: var(--primary);
+    top: -120px; left: -120px;
+  }
+  body::after {
+    width: 460px; height: 460px;
+    background: var(--primary-light);
+    bottom: -160px; right: -160px;
+    animation-delay: -6s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -30px) scale(1.08); }
+  }
+
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius);
+  }
+
+  header.nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(14px);
+    background: rgba(15, 18, 38, 0.55);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 1.15rem;
+    letter-spacing: 0.3px;
+  }
+  .logo i { color: var(--primary-light); font-size: 1.3rem; }
+  .logo span { color: var(--primary-light); }
+  .nav-tag {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 80px 0 40px;
+    animation: fadeInUp 0.9s ease both;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+  .hero h1 span {
+    background: linear-gradient(90deg, var(--primary-light), #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .calculator {
+    margin: 40px 0;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    animation: fadeInUp 1s ease both;
+  }
+
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .form-group .hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    display: block;
+  }
+  .input-wrap { position: relative; }
+  .input-wrap i {
+    position: absolute;
+    left: 16px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-light);
+    pointer-events: none;
+  }
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  input::placeholder { color: rgba(185, 191, 224, 0.6); }
+  input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(92, 113, 229, 0.25);
+  }
+  input.invalid {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+  }
+  .error-msg {
+    color: #ff8a8a;
+    font-size: 0.8rem;
+    margin-top: 6px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    padding: 14px 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(92, 113, 229, 0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(92, 113, 229, 0.55); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+    padding: 14px 22px;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--primary-light); }
+
+  .result-card {
+    padding: 28px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(92,113,229,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .result-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .price {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff, var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 8px;
+    word-break: break-word;
+  }
+  .result-sub {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .result-placeholder {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .result-placeholder i { font-size: 2.4rem; color: var(--primary-light); opacity: 0.7; }
+
+  .pulse { animation: pulse 0.6s ease; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin: 60px 0;
+  }
+  .feature {
+    padding: 26px;
+    text-align: center;
+    transition: transform var(--transition), border-color var(--transition);
+  }
+  .feature:hover { transform: translateY(-6px); border-color: var(--primary-light); }
+  .feature i {
+    font-size: 1.8rem;
+    color: var(--primary-light);
+    margin-bottom: 14px;
+  }
+  .feature h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .feature p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+  .faq { margin: 60px 0 80px; }
+  .faq h2 {
+    text-align: center;
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    margin-bottom: 28px;
+  }
+  .accordion {
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color var(--transition);
+  }
+  .accordion.open { border-color: var(--primary-light); }
+  .accordion-header {
+    width: 100%;
+    background: transparent;
+    color: var(--text);
+    padding: 20px 24px;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .accordion-header i {
+    color: var(--primary-light);
+    transition: transform var(--transition);
+  }
+  .accordion.open .accordion-header i { transform: rotate(180deg); }
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    padding: 0 24px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .accordion.open .accordion-body { max-height: 240px; padding: 0 24px 22px; }
+
+  footer {
+    text-align: center;
+    padding: 30px 24px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(15, 18, 38, 0.4);
+  }
+  footer a { color: var(--primary-light); text-decoration: none; }
+
+  .toast {
+    position: fixed;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: rgba(30, 36, 70, 0.95);
+    border: 1px solid var(--primary-light);
+    color: var(--text);
+    padding: 14px 22px;
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--glass-shadow);
+    font-size: 0.9rem;
+    z-index: 200;
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    display: flex; align-items: center; gap: 10px;
+    max-width: 90vw;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast i { color: var(--primary-light); }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 960px) {
+    .calculator { grid-template-columns: 1fr; }
+    .features { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-tag { display: none; }
+    .hero { padding: 50px 0 20px; }
+    .calculator { padding: 22px; gap: 22px; }
+    .btn-row { flex-direction: column; }
+    .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
+  }
+  @media (max-width: 420px) {
+    .container { padding: 0 16px; }
+    header.nav { padding: 12px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" role="banner">
+  <div class="logo" aria-label="HairPrice — главная">
+    <i class="fa-solid fa-scissors" aria-hidden="true"></i>
+    Hair<span>Price</span>
+  </div>
+  <span class="nav-tag">Шуточный калькулятор для блогеров</span>
+</header>
+
+<main class="container" role="main">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">Сколько стоит <span>твой волос</span>?</h1>
+    <p>Введи название YouTube-канала и количество подписчиков — мы посчитаем, за сколько люди готовы купить твой волос. Чисто по приколу, но с серьёзной математикой.</p>
+  </section>
+
+  <section class="calculator glass" aria-labelledby="calc-title">
+    <div>
+      <h2 id="calc-title" style="font-size:1.15rem;margin-bottom:18px;">
+        <i class="fa-solid fa-calculator" style="color:var(--primary-light);margin-right:8px;" aria-hidden="true"></i>
+        Параметры канала
+      </h2>
+      <form id="hairForm" novalidate>
+        <div class="form-group">
+          <label for="channelName">Название канала</label>
+          <div class="input-wrap">
+            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+            <input type="text" id="channelName" name="channelName" placeholder="Например, TechReview" autocomplete="off" aria-describedby="nameHint" required />
+          </div>
+          <span class="hint" id="nameHint">Чем длиннее название — тем «гуще» волос.</span>
+          <span class="error-msg" id="nameError">Введите название канала.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="subscribers">Количество подписчиков</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-users" aria-hidden="true"></i>
+            <input type="number" id="subscribers" name="subscribers" placeholder="100000" min="0" step="1" autocomplete="off" aria-describedby="subsHint" required />
+          </div>
+          <span class="hint" id="subsHint">Можно вводить целые числа.</span>
+          <span class="error-msg" id="subsError">Введите число больше нуля.</span>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn-primary">
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+            Узнать цену
+          </button>
+          <button type="button" class="btn-ghost" id="resetBtn">
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+            Сбросить
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="result-card glass" id="resultCard" aria-live="polite">
+      <div class="result-placeholder" id="placeholder">
+        <i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>
+        <span>Здесь появится цена твоего волоса</span>
+      </div>
+
+      <div id="resultContent" hidden>
+        <h3>Рыночная стоимость</h3>
+        <div class="price" id="priceValue">— ₽</div>
+        <div class="result-sub" id="resultSub">—</div>
+        <button type="button" class="btn-ghost" id="shareBtn" style="margin-top:8px;">
+          <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          Поделиться
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" aria-label="Как это работает">
+    <article class="feature glass">
+      <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+      <h3>1. Вводишь канал</h3>
+      <p>Указываешь название и число подписчиков — без регистрации и SMS.</p>
+    </article>
+    <article class="feature glass">
+      <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+      <h3>2. Считаем «густоту»</h3>
+      <p>Алгоритм учитывает длину названия и вовлечённость аудитории.</p>
+    </article>
+    <article class="feature glass">
+      <i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i>
+      <h3>3. Получаешь цену</h3>
+      <p>Мгновенный результат в рублях и возможность поделиться с друзьями.</p>
+    </article>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Частые вопросы</h2>
+
+    <div class="accordion glass">
+      <button class="accordion-header" aria-expanded="false">
+        Это реально работает?
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion-body">
+        Это шуточный калькулятор. Формула придумана для развлечения и не отражает реальную рыночную стоимость.
+      </div>
+    </div>
+
+    <div class="accordion glass">
+      <button class="accordion-header" aria-expanded="false">
+        Мои данные где-то сохраняются?
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion-body">
+        Нет. Все вычисления происходят локально в браузере, данные никуда не отправляются.
+      </div>
+    </div>
+
+    <div class="accordion glass">
+      <button class="accordion-header" aria-expanded="false">
+        Как считается цена?
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion-body">
+        Базовая ставка 500 ₽ плюс коэффициент, зависящий от числа подписчиков и длины названия канала.
+      </div>
+    </div>
+
+    <div class="accordion glass">
+      <button class="accordion-header" aria-expanded="false">
+        Можно ли использовать на телефоне?
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion-body">
+        Да, интерфейс полностью адаптивен и корректно отображается на смартфонах и планшетах.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> HairPrice — развлекательный проект. Все совпадения случайны.
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toastText">Скопировано!</span>
+</div>
+
+<script>
+  const $ = (sel) => document.querySelector(sel);
+  const fmt = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
+
+  const form = $('#hairForm');
+  const nameInput = $('#channelName');
+  const subsInput = $('#subscribers');
+  const nameError = $('#nameError');
+  const subsError = $('#subsError');
+  const placeholder = $('#placeholder');
+  const resultContent = $('#resultContent');
+  const priceValue = $('#priceValue');
+  const resultSub = $('#resultSub');
+  const resultCard = $('#resultCard');
+  const toast = $('#toast');
+  const toastText = $('#toastText');
+
+  $('#year').textContent = new Date().getFullYear();
+
+  function setError(input, errorEl, show) {
+    input.classList.toggle('invalid', show);
+    errorEl.classList.toggle('show', show);
+  }
+
+  function calculateHairPrice(name, subs) {
+    const base = 500;
+    const nameFactor = Math.max(1, name.trim().length) * 15;
+    const subsFactor = Math.log10(subs + 10) * 250;
+    const engagement = (subs % 7) * 12;
+    return Math.round(base + nameFactor + subsFactor + engagement);
+  }
+
+  function showResult(price, name, subs) {
+    placeholder.hidden = true;
+    resultContent.hidden = false;
+    priceValue.textContent = fmt.format(price);
+    resultSub.textContent = `Канал «${name}» · ${subs.toLocaleString('ru-RU')} подписчиков`;
+    resultCard.classList.remove('pulse');
+    void resultCard.offsetWidth;
+    resultCard.classList.add('pulse');
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  let toastTimer;
+  function showToast(msg, icon = 'fa-circle-check') {
+    toast.querySelector('i').className = `fa-solid ${icon}`;
+    toastText.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+
+  function validate() {
+    let ok = true;
+    const name = nameInput.value.trim();
+    const subs = Number(subsInput.value);
+
+    if (!name) { setError(nameInput, nameError, true); ok = false; }
+    else setError(nameInput, nameError, false);
+
+    if (!subsInput.value || isNaN(subs) || subs < 0) {
+      setError(subsInput, subsError, true); ok = false;
+    } else setError(subsInput, subsError, false);
+
+    return ok ? { name, subs } : null;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = validate();
+    if (!data) return;
+    const price = calculateHairPrice(data.name, data.subs);
+    showResult(price, data.name, data.subs);
+    showToast('Цена рассчитана!');
+  });
+
+  [nameInput, subsInput].forEach((input) => {
+    input.addEventListener('input', () => {
+      if (input === nameInput) setError(input, nameError, false);
+      if (input === subsInput) setError(input, subsError, false);
+    });
+  });
+
+  $('#resetBtn').addEventListener('click', () => {
+    form.reset();
+    setError(nameInput, nameError, false);
+    setError(subsInput, subsError, false);
+    placeholder.hidden = false;
+    resultContent.hidden = true;
+    showToast('Форма очищена', 'fa-rotate-left');
+  });
+
+  // Формирование дружелюбного сообщения для шаринга
+  function buildShareMessage() {
+    const name = nameInput.value.trim() || 'мой канал';
+    const subs = Number(subsInput.value) || 0;
+    const price = priceValue.textContent;
+    return `Прикинь, мой волос стоит ${price}! 💇‍♂️\n\nКанал: «${name}» — ${subs.toLocaleString('ru-RU')} подписчиков.\n\nПроверь свой на HairPrice: ${location.origin}${location.pathname}`;
+  }
+
+  // Копирование с fallback для старых браузеров
+  async function copyToClipboard(text) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  $('#shareBtn').addEventListener('click', async () => {
+    const message = buildShareMessage();
+
+    // Если есть нативный шаринг — используем его, но с копированием тоже
+    const copied = await copyToClipboard(message);
+
+    if (copied) {
+      showToast('Сообщение скопировано — отправь друзьям!', 'fa-copy');
+    } else {
+      showToast('Не удалось скопировать, попробуй ещё раз', 'fa-triangle-exclamation');
+    }
+
+    // Дополнительно: если поддерживается Web Share API, предложим отправить
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'HairPrice — сколько стоит мой волос',
+          text: message
+        });
+      } catch (err) {
+        // Пользователь отменил — ничего не делаем
+      }
+    }
+  });
+
+  document.querySelectorAll('.accordion-header').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const acc = btn.parentElement;
+      const isOpen = acc.classList.contains('open');
+      document.querySelectorAll('.accordion').forEach((a) => {
+        a.classList.remove('open');
+        a.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        acc.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Это реально работает?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Это шуточный калькулятор. Формула придумана для развлечения." }
+    },
+    {
+      "@type": "Question",
+      "name": "Мои данные где-то сохраняются?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Нет, все вычисления происходят локально в браузере." }
+    },
+    {
+      "@type": "Question",
+      "name": "Как считается цена?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Базовая ставка 500 ₽ плюс коэффициент от числа подписчиков и длины названия." }
+    },
+    {
+      "@type": "Question",
+      "name": "Можно ли использовать на телефоне?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Да, интерфейс полностью адаптивен." }
+    }
+  ]
+}
+</script>
+</body>
+</html>
