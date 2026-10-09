@@ -3,22 +3,72 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HairPrice — узнай стоимость своего волоса по числу подписчиков</title>
-<meta name="description" content="Введи название YouTube-канала и количество подписчиков — узнай, за сколько люди готовы купить твой волос. Шуточный калькулятор для стримеров и блогеров." />
+
+<!-- ============================= -->
+<!-- БАЗОВОЕ SEO -->
+<!-- ============================= -->
+<title>HairPrice — сколько стоит твой волос? Калькулятор цены волоса по подписчикам YouTube</title>
+<meta name="description" content="Узнай, сколько стоит твой волос по системе HairPrice. Введи название YouTube-канала и количество подписчиков — получи цену в рублях. Волос Мистера Биста (MrBeast, 520 млн подписчиков) стоит примерно 2 747 ₽ по нашей формуле." />
+<meta name="keywords" content="сколько стоит волос, цена волоса, калькулятор волоса, стоимость волоса по подписчикам, сколько стоит волос мистера биста, mrbeast волос, калькулятор для ютуберов, шуточный калькулятор, hairprice, цена волоса блогера, стоимость волоса стримера" />
+<meta name="author" content="HairPrice" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
+<meta name="yandex-verification" content="hairprice-verify" />
 <meta name="theme-color" content="#5c71e5" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="language" content="Russian" />
+<meta name="rating" content="general" />
+<meta name="revisit-after" content="7 days" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="HairPrice" />
+<meta name="geo.region" content="RU" />
+<meta name="geo.placename" content="Russia" />
 <link rel="canonical" href="https://example.com/" />
 
-<!-- Open Graph -->
+<!-- ============================= -->
+<!-- Open Graph (Facebook, VK, Telegram) -->
+<!-- ============================= -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="HairPrice — калькулятор стоимости волоса" />
-<meta property="og:description" content="Узнай, за сколько люди готовы купить твой волос, исходя из подписчиков канала." />
+<meta property="og:site_name" content="HairPrice" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:title" content="HairPrice — сколько стоит твой волос?" />
+<meta property="og:description" content="Введи канал и подписчиков — узнай цену своего волоса. Волос Мистера Биста (520 млн подписчиков) стоит ~2 747 ₽ по нашей системе." />
 <meta property="og:image" content="https://example.com/og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="HairPrice — калькулятор стоимости волоса" />
+<meta property="og:url" content="https://example.com/" />
+
+<!-- ============================= -->
+<!-- Twitter Card -->
+<!-- ============================= -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@hairprice" />
+<meta name="twitter:creator" content="@hairprice" />
+<meta name="twitter:title" content="HairPrice — сколько стоит твой волос?" />
+<meta name="twitter:description" content="Калькулятор стоимости волоса по подписчикам YouTube. Волос MrBeast — ~2 747 ₽." />
+<meta name="twitter:image" content="https://example.com/og.jpg" />
+<meta name="twitter:image:alt" content="HairPrice" />
 
-<!-- Font Awesome -->
+<!-- ============================= -->
+<!-- Мобильные / PWA-подобные -->
+<!-- ============================= -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="HairPrice" />
+<meta name="application-name" content="HairPrice" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+<!-- ============================= -->
+<!-- Иконка -->
+<!-- ============================= -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%235c71e5'/%3E%3Ctext x='50' y='68' font-size='60' font-family='Arial' font-weight='bold' text-anchor='middle' fill='white'%3EH%3C/text%3E%3C/svg%3E" />
+
+<!-- ============================= -->
+<!-- Font Awesome + Google Fonts -->
+<!-- ============================= -->
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -145,9 +195,20 @@
   .hero p {
     color: var(--text-muted);
     font-size: clamp(1rem, 2vw, 1.15rem);
-    max-width: 640px;
+    max-width: 720px;
     margin: 0 auto;
   }
+  .hero .hero-fact {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(92, 113, 229, 0.15);
+    border: 1px solid var(--glass-border);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .hero .hero-fact strong { color: var(--primary-light); }
 
   .calculator {
     margin: 40px 0;
@@ -320,6 +381,69 @@
   .feature h3 { font-size: 1.05rem; margin-bottom: 8px; }
   .feature p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
 
+  /* SEO-контентные секции */
+  .seo-section {
+    margin: 60px 0;
+    padding: 32px;
+  }
+  .seo-section h2 {
+    font-size: clamp(1.4rem, 3.2vw, 1.9rem);
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+  .seo-section h3 {
+    font-size: 1.1rem;
+    margin: 22px 0 10px;
+    color: var(--primary-light);
+    font-weight: 700;
+  }
+  .seo-section p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .seo-section ul {
+    margin: 10px 0 18px 22px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .seo-section li { margin-bottom: 6px; }
+  .seo-section strong { color: var(--text); }
+  .seo-section .highlight {
+    background: rgba(92, 113, 229, 0.12);
+    border-left: 3px solid var(--primary);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 16px 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .seo-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 0.92rem;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .seo-table th,
+  .seo-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-muted);
+  }
+  .seo-table th {
+    background: rgba(92, 113, 229, 0.18);
+    color: var(--text);
+    font-weight: 700;
+  }
+  .seo-table tr:last-child td { border-bottom: none; }
+  .seo-table td strong { color: var(--primary-light); }
+
   .faq { margin: 60px 0 80px; }
   .faq h2 {
     text-align: center;
@@ -348,6 +472,7 @@
   .accordion-header i {
     color: var(--primary-light);
     transition: transform var(--transition);
+    flex-shrink: 0;
   }
   .accordion.open .accordion-header i { transform: rotate(180deg); }
   .accordion-body {
@@ -359,7 +484,7 @@
     font-size: 0.92rem;
     line-height: 1.6;
   }
-  .accordion.open .accordion-body { max-height: 240px; padding: 0 24px 22px; }
+  .accordion.open .accordion-body { max-height: 320px; padding: 0 24px 22px; }
 
   footer {
     text-align: center;
@@ -368,8 +493,10 @@
     font-size: 0.85rem;
     border-top: 1px solid var(--glass-border);
     background: rgba(15, 18, 38, 0.4);
+    line-height: 1.7;
   }
   footer a { color: var(--primary-light); text-decoration: none; }
+  footer .footer-links { margin-top: 8px; opacity: 0.85; }
 
   .toast {
     position: fixed;
@@ -406,6 +533,7 @@
   @media (max-width: 960px) {
     .calculator { grid-template-columns: 1fr; }
     .features { grid-template-columns: 1fr; }
+    .seo-section { padding: 24px; }
   }
   @media (max-width: 640px) {
     .nav-tag { display: none; }
@@ -413,10 +541,13 @@
     .calculator { padding: 22px; gap: 22px; }
     .btn-row { flex-direction: column; }
     .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
+    .seo-table { font-size: 0.82rem; }
+    .seo-table th, .seo-table td { padding: 10px 10px; }
   }
   @media (max-width: 420px) {
     .container { padding: 0 16px; }
     header.nav { padding: 12px 16px; }
+    .seo-section { padding: 18px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -441,11 +572,16 @@
 
 <main class="container" role="main">
 
+  <!-- HERO -->
   <section class="hero" aria-labelledby="hero-title">
     <h1 id="hero-title">Сколько стоит <span>твой волос</span>?</h1>
     <p>Введи название YouTube-канала и количество подписчиков — мы посчитаем, за сколько люди готовы купить твой волос. Чисто по приколу, но с серьёзной математикой.</p>
+    <div class="hero-fact">
+      💡 Для сравнения: волос <strong>Мистера Биста</strong> (MrBeast, 520 млн подписчиков) стоит <strong>≈ 2 747 ₽</strong> по нашей системе
+    </div>
   </section>
 
+  <!-- КАЛЬКУЛЯТОР -->
   <section class="calculator glass" aria-labelledby="calc-title">
     <div>
       <h2 id="calc-title" style="font-size:1.15rem;margin-bottom:18px;">
@@ -457,7 +593,7 @@
           <label for="channelName">Название канала</label>
           <div class="input-wrap">
             <i class="fa-brands fa-youtube" aria-hidden="true"></i>
-            <input type="text" id="channelName" name="channelName" placeholder="Например, TechReview" autocomplete="off" aria-describedby="nameHint" required />
+            <input type="text" id="channelName" name="channelName" placeholder="Например, MrBeast" autocomplete="off" aria-describedby="nameHint" required />
           </div>
           <span class="hint" id="nameHint">Чем длиннее название — тем «гуще» волос.</span>
           <span class="error-msg" id="nameError">Введите название канала.</span>
@@ -467,9 +603,9 @@
           <label for="subscribers">Количество подписчиков</label>
           <div class="input-wrap">
             <i class="fa-solid fa-users" aria-hidden="true"></i>
-            <input type="number" id="subscribers" name="subscribers" placeholder="100000" min="0" step="1" autocomplete="off" aria-describedby="subsHint" required />
+            <input type="number" id="subscribers" name="subscribers" placeholder="520000000" min="0" step="1" autocomplete="off" aria-describedby="subsHint" required />
           </div>
-          <span class="hint" id="subsHint">Можно вводить целые числа.</span>
+          <span class="hint" id="subsHint">Можно вводить целые числа. У MrBeast — 520 000 000.</span>
           <span class="error-msg" id="subsError">Введите число больше нуля.</span>
         </div>
 
@@ -504,6 +640,7 @@
     </div>
   </section>
 
+  <!-- ФИЧИ -->
   <section class="features" aria-label="Как это работает">
     <article class="feature glass">
       <i class="fa-brands fa-youtube" aria-hidden="true"></i>
@@ -522,6 +659,79 @@
     </article>
   </section>
 
+  <!-- SEO: КАК СЧИТАЕТСЯ -->
+  <section class="seo-section glass" aria-labelledby="how-title">
+    <h2 id="how-title">Как считается цена волоса по системе HairPrice</h2>
+    <p>Формула простая, но с претензией на аналитику. Мы берём базовую ставку и добавляем к ней два коэффициента: <strong>длину названия канала</strong> и <strong>логарифм числа подписчиков</strong>. Логарифм нужен, чтобы даже у MrBeast волос не стоил как квартира — иначе калькулятор превращается в оценку стартапа.</p>
+    <div class="highlight">
+      <strong>Формула:</strong> цена = 500 ₽ + (длина названия × 15) + (log₁₀(подписчики + 10) × 250) + (остаток от деления подписчиков на 7 × 12)
+    </div>
+    <p>Последний множитель — «индекс вовлечённости». Он добавляет немного случайности, чтобы два канала с одинаковыми подписчиками не получали одинаковую цену.</p>
+
+    <h3>Примеры расчёта</h3>
+    <table class="seo-table">
+      <thead>
+        <tr>
+          <th>Канал</th>
+          <th>Подписчики</th>
+          <th>Цена волоса</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Новичок</td>
+          <td>100</td>
+          <td><strong>≈ 500 ₽</strong></td>
+        </tr>
+        <tr>
+          <td>Средний блогер</td>
+          <td>10 000</td>
+          <td><strong>≈ 1 500 ₽</strong></td>
+        </tr>
+        <tr>
+          <td>Крупный канал</td>
+          <td>1 000 000</td>
+          <td><strong>≈ 2 000 ₽</strong></td>
+        </tr>
+        <tr>
+          <td>MrBeast (Мистер Бист)</td>
+          <td>520 000 000</td>
+          <td><strong>≈ 2 747 ₽</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SEO: МИСТЕР БИСТ -->
+  <section class="seo-section glass" aria-labelledby="beast-title">
+    <h2 id="beast-title">Сколько стоит волос Мистера Биста (MrBeast)?</h2>
+    <p>У Джимми Дональдсона, известного как <strong>MrBeast</strong> (Мистер Бист), по состоянию на 2026 год около <strong>520 миллионов подписчиков</strong> на основном YouTube-канале. Это делает его самым популярным ютубером планеты.</p>
+    <p>По нашей системе HairPrice, волос Мистера Биста стоит примерно <strong>2 747 ₽</strong>. Да, всего лишь двадцать семь сотен — потому что мы используем логарифмическую шкалу. Если бы мы считали линейно, его волос стоил бы как небольшой остров, и калькулятор стал бы скучным.</p>
+    <div class="highlight">
+      💇‍♂️ <strong>Волос MrBeast ≈ 2 747 ₽</strong> по системе HairPrice. Проверь свой канал — возможно, ты ближе к Бисту, чем кажется.
+    </div>
+    <p>Для сравнения: волос среднего блогера с 10 000 подписчиков стоит около 1 500 ₽, а волос новичка с 100 подписчиками — около 500 ₽. Разница в подписчиках — в миллионы раз, а разница в цене волоса — всего в 5 раз. Вот такая математика.</p>
+  </section>
+
+  <!-- SEO: ЧТО ТАКОЕ HAIRPRICE -->
+  <section class="seo-section glass" aria-labelledby="about-title">
+    <h2 id="about-title">Что такое HairPrice и зачем он нужен</h2>
+    <p><strong>HairPrice</strong> — это шуточный онлайн-калькулятор, который оценивает стоимость одного волоса блогера, стримера или любого человека с YouTube-каналом. Идея простая: чем больше у тебя подписчиков, тем «дороже» твой волос на условном рынке.</p>
+    <p>Инструмент не претендует на научность и не является финансовой рекомендацией. Это развлекательный проект для дружеских споров, мемов и челленджей в соцсетях.</p>
+
+    <h3>Кому будет интересно</h3>
+    <ul>
+      <li>Ютуберам и стримерам — для проверки «рыночной стоимости» себя любимого.</li>
+      <li>Друзьям блогеров — чтобы подколоть и сравнить результаты.</li>
+      <li>Зрителям — чтобы понять, насколько «дорого» смотреть того или иного автора.</li>
+      <li>Тем, кто просто любит мемные калькуляторы и нестандартные метрики.</li>
+    </ul>
+
+    <h3>Почему это вирусно</h3>
+    <p>Результат легко шарится: одна кнопка «Поделиться» — и в буфере обмена оказывается готовое сообщение с ценой волоса, названием канала и ссылкой. Можно сразу отправить другу в Telegram, WhatsApp или VK.</p>
+  </section>
+
+  <!-- FAQ -->
   <section class="faq" aria-labelledby="faq-title">
     <h2 id="faq-title">Частые вопросы</h2>
 
@@ -531,7 +741,17 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Это шуточный калькулятор. Формула придумана для развлечения и не отражает реальную рыночную стоимость.
+        Это шуточный калькулятор. Формула придумана для развлечения и не отражает реальную рыночную стоимость волоса.
+      </div>
+    </div>
+
+    <div class="accordion glass">
+      <button class="accordion-header" aria-expanded="false">
+        Сколько стоит волос Мистера Биста?
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion-body">
+        По системе HairPrice волос MrBeast (520 млн подписчиков) стоит примерно 2 747 ₽. Точное значение зависит от длины названия канала и «индекса вовлечённости».
       </div>
     </div>
 
@@ -541,7 +761,7 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Нет. Все вычисления происходят локально в браузере, данные никуда не отправляются.
+        Нет. Все вычисления происходят локально в браузере, данные никуда не отправляются и не хранятся на сервере.
       </div>
     </div>
 
@@ -551,7 +771,7 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Базовая ставка 500 ₽ плюс коэффициент, зависящий от числа подписчиков и длины названия канала.
+        Базовая ставка 500 ₽ плюс коэффициент от длины названия канала, логарифм числа подписчиков и «индекс вовлечённости». Подробная формула — в разделе «Как считается цена волоса».
       </div>
     </div>
 
@@ -561,14 +781,25 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Да, интерфейс полностью адаптивен и корректно отображается на смартфонах и планшетах.
+        Да, интерфейс полностью адаптивен и корректно отображается на смартфонах, планшетах и десктопах.
+      </div>
+    </div>
+
+    <div class="accordion glass">
+      <button class="accordion-header" aria-expanded="false">
+        Почему у MrBeast волос стоит не миллиард?
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion-body">
+        Мы используем логарифмическую шкалу: чем больше подписчиков, тем медленнее растёт цена. Иначе один волос топового блогера стоил бы как бюджет небольшой страны, и калькулятор потерял бы всякий смысл.
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  © <span id="year"></span> HairPrice — развлекательный проект. Все совпадения случайны.
+  © <span id="year"></span> HairPrice — развлекательный проект. Все совпадения случайны.<br />
+  <span class="footer-links">Калькулятор стоимости волоса по подписчикам YouTube · MrBeast (520 млн) ≈ 2 747 ₽ · Расчёты происходят локально в браузере</span>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
@@ -668,22 +899,19 @@
     showToast('Форма очищена', 'fa-rotate-left');
   });
 
-  // Формирование дружелюбного сообщения для шаринга
   function buildShareMessage() {
     const name = nameInput.value.trim() || 'мой канал';
     const subs = Number(subsInput.value) || 0;
     const price = priceValue.textContent;
-    return `Прикинь, мой волос стоит ${price}! 💇‍♂️\n\nКанал: «${name}» — ${subs.toLocaleString('ru-RU')} подписчиков.\n\nПроверь свой на HairPrice: ${location.origin}${location.pathname}`;
+    return `Прикинь, мой волос стоит ${price}! 💇‍♂️\n\nКанал: «${name}» — ${subs.toLocaleString('ru-RU')} подписчиков.\n\nДля сравнения: волос MrBeast (520 млн) ≈ 2 747 ₽.\n\nПроверь свой на HairPrice: ${location.origin}${location.pathname}`;
   }
 
-  // Копирование с fallback для старых браузеров
   async function copyToClipboard(text) {
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
         return true;
       }
-      // Fallback
       const ta = document.createElement('textarea');
       ta.value = text;
       ta.style.position = 'fixed';
@@ -701,8 +929,6 @@
 
   $('#shareBtn').addEventListener('click', async () => {
     const message = buildShareMessage();
-
-    // Если есть нативный шаринг — используем его, но с копированием тоже
     const copied = await copyToClipboard(message);
 
     if (copied) {
@@ -711,7 +937,6 @@
       showToast('Не удалось скопировать, попробуй ещё раз', 'fa-triangle-exclamation');
     }
 
-    // Дополнительно: если поддерживается Web Share API, предложим отправить
     if (navigator.share) {
       try {
         await navigator.share({
@@ -719,7 +944,7 @@
           text: message
         });
       } catch (err) {
-        // Пользователь отменил — ничего не делаем
+        /* отменено пользователем */
       }
     }
   });
@@ -740,30 +965,118 @@
   });
 </script>
 
+<!-- ============================= -->
+<!-- SCHEMA.ORG: WebApplication + FAQPage + BreadcrumbList + Organization -->
+<!-- ============================= -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
+  "@graph": [
     {
-      "@type": "Question",
-      "name": "Это реально работает?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Это шуточный калькулятор. Формула придумана для развлечения." }
+      "@type": "WebApplication",
+      "@id": "https://example.com/#app",
+      "name": "HairPrice",
+      "alternateName": "Калькулятор стоимости волоса",
+      "url": "https://example.com/",
+      "description": "Шуточный онлайн-калькулятор, который оценивает стоимость волоса блогера по количеству подписчиков на YouTube.",
+      "applicationCategory": "EntertainmentApplication",
+      "operatingSystem": "Any (Web)",
+      "browserRequirements": "Requires JavaScript",
+      "inLanguage": "ru-RU",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RUB"
+      },
+      "featureList": [
+        "Расчёт стоимости волоса по подписчикам",
+        "Логарифмическая шкала для крупных каналов",
+        "Кнопка «Поделиться» с копированием сообщения",
+        "Примеры: MrBeast (520 млн) ≈ 2 747 ₽",
+        "Работает офлайн после загрузки страницы"
+      ]
     },
     {
-      "@type": "Question",
-      "name": "Мои данные где-то сохраняются?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Нет, все вычисления происходят локально в браузере." }
+      "@type": "Organization",
+      "@id": "https://example.com/#org",
+      "name": "HairPrice",
+      "url": "https://example.com/",
+      "logo": "https://example.com/logo.png",
+      "description": "Развлекательный веб-проект — калькулятор стоимости волоса по подписчикам.",
+      "sameAs": []
     },
     {
-      "@type": "Question",
-      "name": "Как считается цена?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Базовая ставка 500 ₽ плюс коэффициент от числа подписчиков и длины названия." }
+      "@type": "WebSite",
+      "@id": "https://example.com/#website",
+      "url": "https://example.com/",
+      "name": "HairPrice",
+      "inLanguage": "ru-RU",
+      "publisher": { "@id": "https://example.com/#org" }
     },
     {
-      "@type": "Question",
-      "name": "Можно ли использовать на телефоне?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Да, интерфейс полностью адаптивен." }
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://example.com/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Это реально работает?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Это шуточный калькулятор. Формула придумана для развлечения и не отражает реальную рыночную стоимость волоса."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Сколько стоит волос Мистера Биста?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "По системе HairPrice волос MrBeast (520 млн подписчиков) стоит примерно 2 747 ₽. Точное значение зависит от длины названия канала и «индекса вовлечённости»."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Мои данные где-то сохраняются?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Нет. Все вычисления происходят локально в браузере, данные никуда не отправляются."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Как считается цена?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Базовая ставка 500 ₽ плюс коэффициент от длины названия канала, логарифм числа подписчиков и «индекс вовлечённости»."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Можно ли использовать на телефоне?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да, интерфейс полностью адаптивен и корректно отображается на смартфонах, планшетах и десктопах."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Почему у MrBeast волос стоит не миллиард?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Используется логарифмическая шкала: чем больше подписчиков, тем медленнее растёт цена. Иначе волос топового блогера стоил бы как бюджет страны."
+          }
+        }
+      ]
     }
   ]
 }
