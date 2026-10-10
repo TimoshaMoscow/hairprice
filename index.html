@@ -7,9 +7,9 @@
 <!-- ============================= -->
 <!-- БАЗОВОЕ SEO -->
 <!-- ============================= -->
-<title>HairPrice — сколько стоит твой волос? Калькулятор цены волоса по подписчикам YouTube</title>
-<meta name="description" content="Узнай, сколько стоит твой волос по системе HairPrice. Введи данные из YouTube Аналитики — получи реалистичную цену в рублях с учётом вовлечённости, ниши и монетизации." />
-<meta name="keywords" content="сколько стоит волос, цена волоса, калькулятор волоса, стоимость волоса по подписчикам, сколько стоит волос мистера биста, mrbeast волос, калькулятор для ютуберов, hairprice, цена волоса блогера, стоимость волоса стримера, оценка блогера" />
+<title>HairPrice — сколько стоит твой волос? Калькулятор цены волоса по данным YouTube Аналитики</title>
+<meta name="description" content="Узнай, сколько стоит твой волос по системе HairPrice. Просто вставь скопированный текст из YouTube Аналитики — калькулятор сам извлечёт метрики и рассчитает цену." />
+<meta name="keywords" content="сколько стоит волос, цена волоса, калькулятор волоса, стоимость волоса по подписчикам, сколько стоит волос мистера биста, mrbeast волос, калькулятор для ютуберов, hairprice, цена волоса блогера, стоимость волоса стримера, оценка блогера, аналитика youtube" />
 <meta name="author" content="HairPrice" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="googlebot" content="index, follow" />
@@ -31,7 +31,7 @@
 <meta property="og:site_name" content="HairPrice" />
 <meta property="og:locale" content="ru_RU" />
 <meta property="og:title" content="HairPrice — сколько стоит твой волос?" />
-<meta property="og:description" content="Введи данные из YouTube Аналитики — узнай цену своего волоса с учётом вовлечённости, ниши и монетизации." />
+<meta property="og:description" content="Вставь скопированный текст из YouTube Аналитики — калькулятор сам извлечёт метрики и рассчитает цену твоего волоса." />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="HairPrice — калькулятор стоимости волоса" />
@@ -44,7 +44,7 @@
 <meta name="twitter:site" content="@hairprice" />
 <meta name="twitter:creator" content="@hairprice" />
 <meta name="twitter:title" content="HairPrice — сколько стоит твой волос?" />
-<meta name="twitter:description" content="Калькулятор стоимости волоса по данным YouTube Аналитики." />
+<meta name="twitter:description" content="Автоматический парсинг данных из YouTube Аналитики. Вставь текст — получи цену волоса." />
 <meta name="twitter:image:alt" content="HairPrice" />
 
 <!-- ============================= -->
@@ -85,6 +85,9 @@
     --radius: 18px;
     --radius-sm: 12px;
     --transition: 0.3s ease;
+    --success: #4ade80;
+    --warning: #fbbf24;
+    --danger: #ff6b6b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -196,29 +199,27 @@
     margin: 0 auto;
   }
 
-  /* Информационный баннер про Аналитику */
-  .analytics-banner {
+  /* Баннер автопарсинга */
+  .parse-banner {
     margin: 30px 0 0;
-    padding: 18px 22px;
+    padding: 20px 24px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
     border-left: 4px solid var(--primary);
     animation: fadeInUp 1.05s ease both;
   }
-  .analytics-banner .banner-icon {
-    font-size: 1.8rem;
+  .parse-banner .banner-icon {
+    font-size: 2rem;
     color: var(--primary-light);
     flex-shrink: 0;
   }
-  .analytics-banner .banner-text {
+  .parse-banner .banner-text {
     font-size: 0.95rem;
     line-height: 1.55;
     color: var(--text-muted);
   }
-  .analytics-banner .banner-text strong {
-    color: var(--text);
-  }
+  .parse-banner .banner-text strong { color: var(--text); }
 
   .calculator {
     margin: 30px 0 40px;
@@ -248,6 +249,128 @@
     gap: 8px;
   }
 
+  /* Зона вставки текста */
+  .paste-zone {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .paste-textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 16px 18px;
+    border-radius: var(--radius-sm);
+    border: 2px dashed var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    font-family: 'Inter', monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .paste-textarea::placeholder { color: rgba(185, 191, 224, 0.5); }
+  .paste-textarea:focus {
+    border-color: var(--primary);
+    background: rgba(92, 113, 229, 0.06);
+    border-style: solid;
+  }
+  .paste-textarea.drag-over {
+    border-color: var(--primary-light);
+    background: rgba(92, 113, 229, 0.12);
+  }
+
+  .paste-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .btn-parse {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    padding: 12px 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 20px rgba(92, 113, 229, 0.4);
+    font-size: 0.9rem;
+  }
+  .btn-parse:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(92, 113, 229, 0.55); }
+  .btn-parse:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-clear {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+  .btn-clear:hover { color: var(--text); border-color: var(--primary-light); }
+
+  .parse-status {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .parse-status.show { display: block; }
+  .parse-status.success {
+    background: rgba(74, 222, 128, 0.12);
+    border: 1px solid rgba(74, 222, 128, 0.4);
+    color: #b5f5c8;
+  }
+  .parse-status.warning {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: #fde68a;
+  }
+  .parse-status.error {
+    background: rgba(255, 107, 107, 0.12);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    color: #ffb0b0;
+  }
+  .parse-status strong { color: #fff; }
+  .parse-status ul {
+    margin: 8px 0 0 20px;
+    padding: 0;
+  }
+  .parse-status li { margin-bottom: 3px; }
+
+  /* Превью распознанных данных */
+  .parsed-preview {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--glass-border);
+    display: none;
+  }
+  .parsed-preview.show { display: block; }
+  .parsed-preview-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .parsed-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 0.85rem;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+    color: var(--text-muted);
+  }
+  .parsed-row:last-child { border-bottom: none; }
+  .parsed-row .val { color: var(--text); font-weight: 600; }
+  .parsed-row .val.missing { color: var(--text-muted); font-weight: 400; font-style: italic; }
+  .parsed-row .val.found { color: var(--success); }
+
+  /* Форма */
   .form-group { margin-bottom: 16px; }
   .form-group label {
     display: inline-flex;
@@ -304,8 +427,12 @@
     box-shadow: 0 0 0 4px rgba(92, 113, 229, 0.25);
   }
   input.invalid, select.invalid {
-    border-color: #ff6b6b;
+    border-color: var(--danger);
     box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+  }
+  input.autofilled {
+    border-color: var(--success);
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
   }
   .error-msg {
     color: #ff8a8a;
@@ -334,10 +461,7 @@
     transition: background var(--transition);
   }
   .info-tip:hover { background: rgba(92, 113, 229, 0.5); color: #fff; }
-  .info-tip:focus-visible {
-    outline: 2px solid var(--primary-light);
-    outline-offset: 2px;
-  }
+  .info-tip:focus-visible { outline: 2px solid var(--primary-light); outline-offset: 2px; }
   .info-tip .tip-content {
     position: absolute;
     bottom: calc(100% + 10px);
@@ -623,7 +747,6 @@
   .feature h3 { font-size: 1.05rem; margin-bottom: 8px; }
   .feature p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
 
-  /* SEO-контентные секции */
   .seo-section {
     margin: 60px 0;
     padding: 32px;
@@ -788,9 +911,10 @@
     .hero { padding: 50px 0 20px; }
     .calculator { padding: 22px; gap: 22px; }
     .btn-row { flex-direction: column; }
-    .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
+    .btn-primary, .btn-ghost, .btn-parse, .btn-clear { width: 100%; justify-content: center; }
     .form-row { grid-template-columns: 1fr; }
-    .analytics-banner { flex-direction: column; text-align: center; }
+    .parse-banner { flex-direction: column; text-align: center; }
+    .paste-actions { flex-direction: column; }
   }
   @media (max-width: 420px) {
     .container { padding: 0 16px; }
@@ -816,7 +940,7 @@
     <i class="fa-solid fa-scissors" aria-hidden="true"></i>
     Hair<span>Price</span>
   </div>
-  <span class="nav-tag">Оценка волоса по данным YouTube Аналитики</span>
+  <span class="nav-tag">Автопарсинг YouTube Аналитики</span>
 </header>
 
 <main class="container" role="main">
@@ -824,15 +948,14 @@
   <!-- HERO -->
   <section class="hero" aria-labelledby="hero-title">
     <h1 id="hero-title">Сколько стоит <span>твой волос</span>?</h1>
-    <p>Введи данные из YouTube Аналитики (Творческая студия) — и получи точную рыночную стоимость одного волоса с учётом всех ключевых метрик канала.</p>
+    <p>Скопируй текст из YouTube Аналитики, вставь его в поле ниже — и калькулятор сам извлечёт все метрики и рассчитает стоимость твоего волоса.</p>
   </section>
 
-  <!-- Баннер про Аналитику -->
-  <div class="analytics-banner glass" role="note" aria-label="Важная информация">
-    <i class="fa-solid fa-chart-line banner-icon" aria-hidden="true"></i>
+  <!-- Баннер автопарсинга -->
+  <div class="parse-banner glass" role="note" aria-label="Важная информация">
+    <i class="fa-solid fa-clipboard-list banner-icon" aria-hidden="true"></i>
     <div class="banner-text">
-      <strong>Перед расчётом открой YouTube Творческую студию → Аналитика.</strong>
-      Все поля ниже заполняются по реальным данным твоего канала. Наведи курсор на иконку <i class="fa-solid fa-info" aria-hidden="true"></i> рядом с полем — появится подсказка, где именно найти это значение.
+      <strong>Как это работает:</strong> открой YouTube Творческую студию → Аналитика, выдели текст нужной страницы (Ctrl+A → Ctrl+C) и вставь его в поле ниже. Сайт автоматически распознает подписчиков, просмотры, ER, частоту публикаций и другие метрики.
     </div>
   </div>
 
@@ -840,16 +963,57 @@
   <section class="calculator glass" aria-labelledby="calc-title">
     <div>
       <h2 id="calc-title" style="font-size:1.15rem;margin-bottom:22px;">
-        <i class="fa-solid fa-sliders" style="color:var(--primary-light);margin-right:8px;" aria-hidden="true"></i>
-        Данные из YouTube Аналитики
+        <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary-light);margin-right:8px;" aria-hidden="true"></i>
+        Вставь данные из Аналитики
       </h2>
 
       <form id="hairForm" novalidate>
 
-        <!-- Основное -->
+        <!-- Зона вставки -->
         <div class="form-section">
           <div class="form-section-title">
-            <i class="fa-solid fa-circle-info" aria-hidden="true"></i> Основное
+            <i class="fa-solid fa-paste" aria-hidden="true"></i> Шаг 1. Скопируй и вставь
+          </div>
+
+          <div class="paste-zone">
+            <textarea
+              id="pasteArea"
+              class="paste-textarea"
+              placeholder="Вставь сюда скопированный текст из YouTube Аналитики (Ctrl+V)...&#10;&#10;Например, со страницы «Обзор», «Аудитория» или «Контент». Поддерживается любой порядок строк — алгоритм сам найдёт нужные метрики."
+              aria-label="Поле для вставки текста из YouTube Аналитики"
+            ></textarea>
+            <div class="paste-actions">
+              <button type="button" class="btn-parse" id="parseBtn">
+                <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
+                Распознать данные
+              </button>
+              <button type="button" class="btn-clear" id="clearPasteBtn">
+                <i class="fa-solid fa-eraser" aria-hidden="true"></i>
+                Очистить
+              </button>
+            </div>
+
+            <div class="parse-status" id="parseStatus" role="status" aria-live="polite"></div>
+
+            <div class="parsed-preview" id="parsedPreview">
+              <div class="parsed-preview-title">Распознано из текста</div>
+              <div class="parsed-row"><span>Название канала</span><span class="val" id="pName">—</span></div>
+              <div class="parsed-row"><span>Подписчики</span><span class="val" id="pSubs">—</span></div>
+              <div class="parsed-row"><span>Просмотры (28 дней)</span><span class="val" id="pViews">—</span></div>
+              <div class="parsed-row"><span>Просмотров на видео</span><span class="val" id="pViewsPerVideo">—</span></div>
+              <div class="parsed-row"><span>ER</span><span class="val" id="pEng">—</span></div>
+              <div class="parsed-row"><span>Видео в месяц</span><span class="val" id="pFreq">—</span></div>
+              <div class="parsed-row"><span>Ниша</span><span class="val" id="pNiche">—</span></div>
+              <div class="parsed-row"><span>Лет на YouTube</span><span class="val" id="pYears">—</span></div>
+              <div class="parsed-row"><span>Монетизация</span><span class="val" id="pMon">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ручная корректировка -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Шаг 2. Проверь и уточни
           </div>
 
           <div class="form-group">
@@ -859,13 +1023,13 @@
                 <i class="fa-solid fa-info" aria-hidden="true"></i>
                 <span class="tip-content" role="tooltip">
                   <strong>Где найти</strong>
-                  Название канала указано в шапке твоей Творческой студии YouTube. Введи его так же, как оно отображается зрителям.
+                  Название канала в шапке Творческой студии. Можно редактировать вручную.
                 </span>
               </button>
             </label>
             <div class="input-wrap">
               <i class="fa-brands fa-youtube field-icon" aria-hidden="true"></i>
-              <input type="text" id="channelName" name="channelName" placeholder="Например, TechReview" autocomplete="off" required />
+              <input type="text" id="channelName" name="channelName" placeholder="Например, Тимошка из Москвы" autocomplete="off" required />
             </div>
             <span class="error-msg" id="nameError">Введите название канала (минимум 2 символа).</span>
           </div>
@@ -878,7 +1042,7 @@
                   <i class="fa-solid fa-info" aria-hidden="true"></i>
                   <span class="tip-content" role="tooltip">
                     <strong>Где найти</strong>
-                    Творческая студия → <code>Аналитика</code> → вкладка <code>Аудитория</code>. В верхней части страницы отображается текущее количество подписчиков канала.
+                    Творческая студия → <code>Аналитика</code> → вкладка <code>Аудитория</code>. Отображается в верхней части страницы.
                   </span>
                 </button>
               </label>
@@ -896,7 +1060,7 @@
                   <i class="fa-solid fa-info" aria-hidden="true"></i>
                   <span class="tip-content" role="tooltip">
                     <strong>Где найти</strong>
-                    Творческая студия → <code>Аналитика</code> → вкладка <code>Контент</code>. Возьми среднее число просмотров по последним 10–20 видео и раздели на их количество.
+                    Творческая студия → <code>Аналитика</code> → вкладка <code>Контент</code>. Среднее по последним 10–20 видео.
                   </span>
                 </button>
               </label>
@@ -907,55 +1071,49 @@
               <span class="error-msg" id="viewsError">Введите число от 0.</span>
             </div>
           </div>
-        </div>
 
-        <!-- Вовлечённость -->
-        <div class="form-section">
-          <div class="form-section-title">
-            <i class="fa-solid fa-heart" aria-hidden="true"></i> Вовлечённость
-          </div>
-
-          <div class="form-group">
-            <label for="engagement">
-              Средний ER (вовлечённость), %
-              <button type="button" class="info-tip" aria-label="Подсказка по полю ER">
-                <i class="fa-solid fa-info" aria-hidden="true"></i>
-                <span class="tip-content" role="tooltip">
-                  <strong>Где найти</strong>
-                  Творческая студия → <code>Аналитика</code> → вкладка <code>Вовлечённость</code>. Сложи средние лайки и комментарии по последним видео, раздели на средние просмотры и умножь на 100.
-                </span>
-              </button>
-            </label>
-            <div class="range-wrap">
-              <input type="range" id="engagement" name="engagement" min="0" max="20" step="0.5" value="5" aria-valuemin="0" aria-valuemax="20" aria-valuenow="5" />
-              <span class="range-value" id="engagementValue">5%</span>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="engagement">
+                Средний ER (вовлечённость), %
+                <button type="button" class="info-tip" aria-label="Подсказка по полю ER">
+                  <i class="fa-solid fa-info" aria-hidden="true"></i>
+                  <span class="tip-content" role="tooltip">
+                    <strong>Где найти</strong>
+                    Творческая студия → <code>Аналитика</code> → вкладка <code>Вовлечённость</code>. (Лайки + комментарии) / просмотры × 100.
+                  </span>
+                </button>
+              </label>
+              <div class="range-wrap">
+                <input type="range" id="engagement" name="engagement" min="0" max="20" step="0.5" value="5" aria-valuemin="0" aria-valuemax="20" aria-valuenow="5" />
+                <span class="range-value" id="engagementValue">5%</span>
+              </div>
             </div>
-            <span class="hint">Диапазон 0–20%. Средние значения — 3–7%.</span>
-          </div>
 
-          <div class="form-group">
-            <label for="frequency">
-              Видео в месяц
-              <button type="button" class="info-tip" aria-label="Подсказка по полю Частота публикаций">
-                <i class="fa-solid fa-info" aria-hidden="true"></i>
-                <span class="tip-content" role="tooltip">
-                  <strong>Где найти</strong>
-                  Творческая студия → <code>Контент</code>. Посчитай, сколько видео ты опубликовал за последние 30 дней. Если публикуешь 1 раз в неделю — это примерно 4 видео в месяц.
-                </span>
-              </button>
-            </label>
-            <div class="input-wrap">
-              <i class="fa-solid fa-video field-icon" aria-hidden="true"></i>
-              <input type="number" id="frequency" name="frequency" placeholder="4" min="0" max="60" step="1" value="4" required />
+            <div class="form-group">
+              <label for="frequency">
+                Видео в месяц
+                <button type="button" class="info-tip" aria-label="Подсказка по полю Частота">
+                  <i class="fa-solid fa-info" aria-hidden="true"></i>
+                  <span class="tip-content" role="tooltip">
+                    <strong>Где найти</strong>
+                    Творческая студия → <code>Контент</code>. Количество опубликованных видео за последние 30 дней.
+                  </span>
+                </button>
+              </label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-video field-icon" aria-hidden="true"></i>
+                <input type="number" id="frequency" name="frequency" placeholder="4" min="0" max="60" step="1" value="4" required />
+              </div>
+              <span class="error-msg" id="freqError">Введите число от 0 до 60.</span>
             </div>
-            <span class="error-msg" id="freqError">Введите число от 0 до 60.</span>
           </div>
         </div>
 
         <!-- Ниша и стаж -->
         <div class="form-section">
           <div class="form-section-title">
-            <i class="fa-solid fa-tags" aria-hidden="true"></i> Ниша и стаж
+            <i class="fa-solid fa-tags" aria-hidden="true"></i> Шаг 3. Ниша и стаж
           </div>
 
           <div class="form-group">
@@ -965,7 +1123,7 @@
                 <i class="fa-solid fa-info" aria-hidden="true"></i>
                 <span class="tip-content" role="tooltip">
                   <strong>Где найти</strong>
-                  Определи основную тему, под которую попадает большинство твоих видео. Если контент смешанный — выбери ту, что приносит наибольшее число просмотров.
+                  Определи основную тему канала. Если контент смешанный — выбери ту, что приносит больше просмотров.
                 </span>
               </button>
             </label>
@@ -994,7 +1152,7 @@
                   <i class="fa-solid fa-info" aria-hidden="true"></i>
                   <span class="tip-content" role="tooltip">
                     <strong>Где найти</strong>
-                    Творческая студия → <code>Настройки</code> → <code>Канал</code> → <code>Расширенные настройки</code>. Там указана дата создания канала. Вычти её из текущего года.
+                    Творческая студия → <code>Настройки</code> → <code>Канал</code> → <code>Расширенные настройки</code>. Там указана дата создания.
                   </span>
                 </button>
               </label>
@@ -1012,7 +1170,7 @@
                   <i class="fa-solid fa-info" aria-hidden="true"></i>
                   <span class="tip-content" role="tooltip">
                     <strong>Где найти</strong>
-                    Творческая студия → <code>Монетизация</code>. Если подключена только реклама или донаты — «Частичная». Если ещё и спонсоры, партнёрки и брендовые интеграции — «Полная».
+                    Творческая студия → <code>Монетизация</code>. Реклама и донаты — «Частичная», плюс спонсоры и брендовые интеграции — «Полная».
                   </span>
                 </button>
               </label>
@@ -1044,7 +1202,7 @@
     <div class="result-card glass" id="resultCard" aria-live="polite">
       <div class="result-placeholder" id="placeholder">
         <i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>
-        <span>Заполни данные из YouTube Аналитики — и здесь появится рыночная цена твоего волоса</span>
+        <span>Вставь данные из YouTube Аналитики — и здесь появится рыночная цена твоего волоса</span>
       </div>
 
       <div id="resultContent" hidden>
@@ -1080,14 +1238,14 @@
   <!-- ФИЧИ -->
   <section class="features" aria-label="Как это работает">
     <article class="feature glass">
-      <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-      <h3>1. Открой Аналитику</h3>
-      <p>Зайди в YouTube Творческую студию → Аналитика. Возьми метрики по последним видео.</p>
+      <i class="fa-solid fa-copy" aria-hidden="true"></i>
+      <h3>1. Скопируй текст</h3>
+      <p>Открой YouTube Аналитику и скопируй текст любой страницы — «Обзор», «Аудитория», «Контент».</p>
     </article>
     <article class="feature glass">
-      <i class="fa-solid fa-keyboard" aria-hidden="true"></i>
-      <h3>2. Заполни 8 полей</h3>
-      <p>Подписчики, просмотры, ER, ниша, стаж и монетизация. Наведи на иконку — увидишь, где искать.</p>
+      <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+      <h3>2. Вставь в поле</h3>
+      <p>Алгоритм сам распознает подписчиков, просмотры, ER, частоту и другие метрики.</p>
     </article>
     <article class="feature glass">
       <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
@@ -1098,44 +1256,42 @@
 
   <!-- SEO: КАК ПОЛУЧИТЬ ДАННЫЕ -->
   <section class="seo-section glass" aria-labelledby="data-title">
-    <h2 id="data-title">Как получить данные из YouTube Аналитики для расчёта</h2>
-    <p>Все поля калькулятора заполняются по реальным метрикам твоего канала. Ниже — пошаговая инструкция, где именно в Творческой студии найти каждое значение.</p>
+    <h2 id="data-title">Как получить данные из YouTube Аналитики</h2>
+    <p>Самый простой способ — скопировать текст со страницы Аналитики и вставить в поле выше. Алгоритм распознает нужные метрики автоматически. Ниже — что именно копировать.</p>
 
     <ol class="howto-steps">
       <li>
-        <strong>Открой YouTube Творческую студию.</strong> Перейди на <code>studio.youtube.com</code> и выбери нужный канал, если их несколько.
+        <strong>Открой YouTube Творческую студию.</strong> Перейди на <code>studio.youtube.com</code> и выбери нужный канал.
       </li>
       <li>
-        <strong>Перейди во вкладку «Аналитика».</strong> Она находится в левом меню. Если её не видно, разверни полное меню.
+        <strong>Перейди во вкладку «Аналитика».</strong> Разверни полное меню, если её не видно.
       </li>
       <li>
-        <strong>Количество подписчиков.</strong> Открой вкладку <code>Аудитория</code> — текущее число подписчиков отображается в верхней части страницы.
+        <strong>Скопируй страницу «Обзор».</strong> Ctrl+A → Ctrl+C. Там есть подписчики, просмотры, время просмотра и расчётный доход.
       </li>
       <li>
-        <strong>Просмотры на видео.</strong> Открой вкладку <code>Контент</code>. Посмотри просмотры последних 10–20 видео и раздели общее количество на их число — это и будет среднее.
+        <strong>Скопируй страницу «Аудитория».</strong> Здесь указано текущее число подписчиков, зрители в месяц, возраст и пол.
       </li>
       <li>
-        <strong>ER (вовлечённость).</strong> Открой вкладку <code>Вовлечённость</code>. Сложи средние лайки и комментарии, раздели на средние просмотры и умножь на 100.
+        <strong>Скопируй страницу «Контент».</strong> Тут список всех видео — можно взять средние просмотры и частоту публикаций.
       </li>
       <li>
-        <strong>Видео в месяц.</strong> В разделе <code>Контент</code> посчитай, сколько видео ты опубликовал за последние 30 дней.
+        <strong>Скопируй страницу «Вовлечённость».</strong> Здесь лайки и комментарии — из них считается ER.
       </li>
       <li>
-        <strong>Лет на YouTube.</strong> В <code>Настройках</code> канала → <code>Расширенные настройки</code> указана дата создания. Вычти её из текущего года.
+        <strong>Вставь весь текст в поле.</strong> Можно вставлять несколько страниц подряд — алгоритм объединит данные.
       </li>
       <li>
-        <strong>Монетизация.</strong> В разделе <code>Монетизация</code> посмотри, какие источники дохода подключены. Реклама и донаты — «Частичная», плюс спонсоры и брендовые интеграции — «Полная».
+        <strong>Проверь распознанные значения.</strong> Если что-то не нашлось — введи вручную. Поля подсветятся зелёным, если данные подставлены автоматически.
       </li>
     </ol>
-
-    <p>Если каких-то данных пока нет — можно указать приблизительные значения. Точность расчёта зависит от точности введённых метрик.</p>
   </section>
 
   <!-- SEO: ЧТО ТАКОЕ HAIRPRICE -->
   <section class="seo-section glass" aria-labelledby="about-title">
     <h2 id="about-title">Что такое HairPrice</h2>
-    <p><strong>HairPrice</strong> — это онлайн-калькулятор, который оценивает стоимость одного волоса блогера, стримера или любого человека с YouTube-каналом. Чем качественнее и активнее канал, тем дороже твой волос на условном рынке.</p>
-    <p>Модель учитывает восемь параметров канала, включая подписчиков, просмотры, вовлечённость аудитории, тематику, стаж и уровень монетизации. Результат — рыночная цена волоса в рублях, уровень канала и разбивка по факторам.</p>
+    <p><strong>HairPrice</strong> — это онлайн-калькулятор, который оценивает стоимость одного волоса блогера, стримера или любого человека с YouTube-каналом. Чем качественнее и активнее канал, тем дороже твой волос.</p>
+    <p>Модель учитывает восемь параметров канала: подписчиков, просмотры, вовлечённость аудитории, тематику, стаж и уровень монетизации. Данные можно ввести вручную или распознать автоматически из скопированного текста YouTube Аналитики.</p>
 
     <h3>Кому будет интересно</h3>
     <ul>
@@ -1155,31 +1311,31 @@
 
     <div class="accordion glass">
       <button class="accordion-header" aria-expanded="false">
-        Откуда брать данные для расчёта?
+        Как работает автопарсинг данных?
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Все метрики берутся из YouTube Творческой студии → Аналитика. Пошаговая инструкция — в разделе «Как получить данные из YouTube Аналитики» выше. Наведи курсор на иконку рядом с полем — увидишь подсказку, где искать конкретное значение.
+        Ты копируешь текст со страницы YouTube Аналитики (Ctrl+A → Ctrl+C) и вставляешь в поле. Алгоритм ищет по тексту знакомые метки — «Подписчики», «Просмотры», «ER» и т.д. — и извлекает числа. Все данные обрабатываются локально в браузере.
       </div>
     </div>
 
     <div class="accordion glass">
       <button class="accordion-header" aria-expanded="false">
-        Почему нужно вводить так много данных?
+        Что если не все поля распознались?
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Чем больше параметров — тем точнее оценка. Подписчики, просмотры, ER, ниша, стаж и монетизация вместе дают полную картину канала.
+        Проверь превью «Распознано из текста» — там видно, какие метрики найдены, а какие нет. Незаполненные поля можно ввести вручную, а подсказки рядом с каждым полем подскажут, где их взять.
       </div>
     </div>
 
     <div class="accordion glass">
       <button class="accordion-header" aria-expanded="false">
-        Что делать, если у меня новый канал без аналитики?
+        С каких страниц Аналитики можно копировать текст?
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Укажи приблизительные значения по тем видео, которые уже опубликованы. Даже с минимальными данными расчёт будет корректным — просто точность окажется ниже.
+        С любой — «Обзор», «Аудитория», «Контент», «Вовлечённость», «Доход». Можно вставлять несколько страниц подряд, алгоритм объединит данные и выберет наиболее полные значения.
       </div>
     </div>
 
@@ -1189,7 +1345,7 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Нет. Все вычисления происходят локально в браузере, данные никуда не отправляются и не хранятся на сервере.
+        Нет. Все вычисления и парсинг происходят локально в браузере. Никакие данные не отправляются на сервер и не сохраняются.
       </div>
     </div>
 
@@ -1199,7 +1355,7 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        ER (Engagement Rate) — это отношение лайков и комментариев к просмотрам. Посмотреть можно в YouTube Studio → Аналитика → Вовлечённость. Средние значения — 3–7%, высокие — 10%+.
+        ER (Engagement Rate) — отношение лайков и комментариев к просмотрам. Посмотреть можно в YouTube Studio → Аналитика → Вовлечённость. Средние значения — 3–7%, высокие — 10%+.
       </div>
     </div>
 
@@ -1209,7 +1365,7 @@
         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="accordion-body">
-        Да, интерфейс полностью адаптивен и корректно отображается на смартфонах, планшетах и десктопах.
+        Да, интерфейс полностью адаптивен. На мобильном вставь текст через долгое нажатие в поле.
       </div>
     </div>
   </section>
@@ -1217,7 +1373,7 @@
 
 <footer>
   © <span id="year"></span> HairPrice. Все права защищены.<br />
-  <span class="footer-links">Калькулятор стоимости волоса по данным YouTube Аналитики · Расчёты происходят локально в браузере</span>
+  <span class="footer-links">Автопарсинг YouTube Аналитики · Расчёты происходят локально в браузере</span>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
@@ -1226,9 +1382,15 @@
 </div>
 
 <script>
+  'use strict';
+
   const $ = (sel) => document.querySelector(sel);
   const fmt = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
+  const numFmt = new Intl.NumberFormat('ru-RU');
 
+  // ============================
+  // Элементы
+  // ============================
   const form = $('#hairForm');
   const nameInput = $('#channelName');
   const subsInput = $('#subscribers');
@@ -1245,6 +1407,22 @@
   const viewsError = $('#viewsError');
   const freqError = $('#freqError');
   const yearsError = $('#yearsError');
+
+  const pasteArea = $('#pasteArea');
+  const parseBtn = $('#parseBtn');
+  const clearPasteBtn = $('#clearPasteBtn');
+  const parseStatus = $('#parseStatus');
+  const parsedPreview = $('#parsedPreview');
+
+  const pName = $('#pName');
+  const pSubs = $('#pSubs');
+  const pViews = $('#pViews');
+  const pViewsPerVideo = $('#pViewsPerVideo');
+  const pEng = $('#pEng');
+  const pFreq = $('#pFreq');
+  const pNiche = $('#pNiche');
+  const pYears = $('#pYears');
+  const pMon = $('#pMon');
 
   const placeholder = $('#placeholder');
   const resultContent = $('#resultContent');
@@ -1267,16 +1445,565 @@
 
   $('#year').textContent = new Date().getFullYear();
 
+  // ============================
+  // Слайдер ER
+  // ============================
   engagementInput.addEventListener('input', () => {
     engagementValue.textContent = engagementInput.value + '%';
     engagementInput.setAttribute('aria-valuenow', engagementInput.value);
   });
 
+  // ============================
+  // Утилиты
+  // ============================
   function setError(input, errorEl, show) {
     input.classList.toggle('invalid', show);
     errorEl.classList.toggle('show', show);
   }
 
+  function markAutofilled(input) {
+    input.classList.remove('autofilled');
+    void input.offsetWidth;
+    input.classList.add('autofilled');
+    setTimeout(() => input.classList.remove('autofilled'), 2500);
+  }
+
+  // ============================
+  // Парсер текста YouTube Аналитики
+  // ============================
+
+  // Расшифровка сокращений: "83,8 тыс." -> 83800, "1,2 млн" -> 1200000
+  function parseHumanNumber(str) {
+    if (!str) return null;
+    // Нормализуем: пробелы (включая неразрывные) убираем, запятую меняем на точку
+    let s = String(str).trim()
+      .replace(/[\s\u00A0\u202F]/g, '')
+      .replace(',', '.')
+      .replace(/[^\d.\-]/g, '');
+    if (!s) return null;
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+
+  // Извлечь число с суффиксом (тыс, млн, млрд, K, M, B)
+  function extractScaledNumber(raw) {
+    if (!raw) return null;
+    const str = String(raw).trim().replace(/[\u00A0\u202F]/g, ' ');
+    // Ищем "83,8 тыс.", "1,2 млн", "24 031", "10,5K"
+    const m = str.match(/([\d][\d\s.,]*)\s*(тыс|млн|млрд|K|M|B)?\.?/i);
+    if (!m) return null;
+    let numStr = m[1].replace(/[\s\u00A0\u202F]/g, '').replace(',', '.');
+    let num = parseFloat(numStr);
+    if (isNaN(num)) return null;
+    const suffix = (m[2] || '').toLowerCase();
+    if (suffix === 'тыс' || suffix === 'k') num *= 1_000;
+    else if (suffix === 'млн' || suffix === 'm') num *= 1_000_000;
+    else if (suffix === 'млрд' || suffix === 'b') num *= 1_000_000_000;
+    return Math.round(num);
+  }
+
+  // Ищет число, идущее рядом с ключевым словом
+  function findNumberNear(text, patterns, options = {}) {
+    const { maxDistance = 200, preferSameLine = true, units = null } = options;
+    for (const pattern of patterns) {
+      const re = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g');
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        const idx = m.index;
+        const after = text.slice(idx + m[0].length, idx + m[0].length + maxDistance);
+        const before = text.slice(Math.max(0, idx - maxDistance), idx);
+
+        // Ищем число в after
+        const afterLine = preferSameLine ? after.split('\n')[0] : after;
+        const numAfter = extractScaledNumber(afterLine);
+        if (numAfter !== null && numAfter > 0) {
+          if (units) {
+            const unitRe = new RegExp(units, 'i');
+            if (!unitRe.test(afterLine)) continue;
+          }
+          return { value: numAfter, raw: afterLine.trim() };
+        }
+        // Ищем число в before (последняя строка)
+        const beforeLines = before.split('\n');
+        const beforeLine = beforeLines[beforeLines.length - 1];
+        const numBefore = extractScaledNumber(beforeLine);
+        if (numBefore !== null && numBefore > 0) {
+          return { value: numBefore, raw: beforeLine.trim() };
+        }
+      }
+    }
+    return null;
+  }
+
+  // Ищет строку после ключевого слова
+  function findTextAfter(text, pattern, options = {}) {
+    const { maxLength = 100 } = options;
+    const re = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g');
+    const m = re.exec(text);
+    if (!m) return null;
+    const after = text.slice(m.index + m[0].length, m.index + m[0].length + maxLength);
+    const line = after.split('\n').map(s => s.trim()).filter(Boolean)[0];
+    return line || null;
+  }
+
+  // Универсальный парсер
+  function parseAnalyticsText(rawText) {
+    if (!rawText || typeof rawText !== 'string') {
+      return { error: 'Пустой текст' };
+    }
+
+    const text = rawText.replace(/\r\n/g, '\n');
+    const result = {
+      name: null,
+      subs: null,
+      views28d: null,
+      viewsPerVideo: null,
+      engagement: null,
+      frequency: null,
+      niche: null,
+      years: null,
+      monetization: null,
+      confidence: {}
+    };
+
+    // ============ НАЗВАНИЕ КАНАЛА ============
+    // Ищем шаблон "X\n\nОписание" или первую строку, за которой идёт "Описание"
+    let nameMatch = text.match(/^([^\n]{2,80})\n+Описание/m);
+    if (nameMatch) {
+      result.name = nameMatch[1].trim();
+      result.confidence.name = true;
+    } else {
+      // Альтернатива: "Тимошка из Москвы\n\nОписание"
+      nameMatch = text.match(/([А-Яа-яA-Za-z][^\n]{2,60})\s*\n+\s*Описание/);
+      if (nameMatch) {
+        result.name = nameMatch[1].trim();
+        result.confidence.name = true;
+      }
+    }
+
+    // ============ ПОДПИСЧИКИ ============
+    // Приоритет: "24 031\nПодписчики" или "Подписчики\n24 031" или "Подписчики\n+186"
+    // 1) Текущая статистика — самое надёжное
+    let m = text.match(/В реальном времени\s*\n\s*([\d\s.,]+)\s*\n\s*Подписчики/);
+    if (m) {
+      const v = extractScaledNumber(m[1]);
+      if (v) { result.subs = v; result.confidence.subs = true; }
+    }
+    // 2) "Подписчики\n24 034"
+    if (!result.subs) {
+      m = text.match(/Подписчики\s*\n+\s*([\d\s.,]+)\s*(?:тыс|млн)?/);
+      if (m) {
+        const v = extractScaledNumber(m[1]);
+        if (v && v > 10) { result.subs = v; result.confidence.subs = true; }
+      }
+    }
+    // 3) "24 034\nПодписчики"
+    if (!result.subs) {
+      m = text.match(/([\d][\d\s.,]{2,})\s*\n+\s*Подписчики/);
+      if (m) {
+        const v = extractScaledNumber(m[1]);
+        if (v && v > 10) { result.subs = v; result.confidence.subs = true; }
+      }
+    }
+    // 4) "24 тыс. подписчиков"
+    if (!result.subs) {
+      m = text.match(/([\d][\d\s.,]*\s*(?:тыс|млн|млрд)?\.?)\s*подписчик/);
+      if (m) {
+        const v = extractScaledNumber(m[1]);
+        if (v && v > 10) { result.subs = v; result.confidence.subs = true; }
+      }
+    }
+
+    // ============ ПРОСМОТРЫ ============
+    // 1) "Просмотры\n83,8 тыс."
+    m = text.match(/Просмотры\s*\n+\s*([\d][\d\s.,]*\s*(?:тыс|млн|млрд)?)/);
+    if (m) {
+      const v = extractScaledNumber(m[1]);
+      if (v && v > 100) { result.views28d = v; result.confidence.views28d = true; }
+    }
+    // 2) "83,8 тыс.\nОбычное значение"
+    if (!result.views28d) {
+      m = text.match(/([\d][\d\s.,]*\s*(?:тыс|млн|млрд)?)\s*\n+\s*Обычное значение/);
+      if (m) {
+        const v = extractScaledNumber(m[1]);
+        if (v && v > 100) { result.views28d = v; result.confidence.views28d = true; }
+      }
+    }
+    // 3) "Просмотры всех ваших видео" -> большое число рядом
+    if (!result.views28d) {
+      m = text.match(/Количество просмотров всех ваших видео[^\n]*\n+([\d][\d\s.,]*\s*(?:тыс|млн)?)/);
+      if (m) {
+        const v = extractScaledNumber(m[1]);
+        if (v && v > 100) { result.views28d = v; result.confidence.views28d = true; }
+      }
+    }
+
+    // ============ ПРОСМОТРЫ НА ВИДЕО ============
+    // Из блока "Самый популярный контент за период" берём среднее
+    const popularBlockMatch = text.match(/Самый популярный контент за период([\s\S]{200,8000}?)(?:Подробнее|Текущая статистика|$)/);
+    if (popularBlockMatch) {
+      const block = popularBlockMatch[1];
+      // Ищем строки с 4-6-значными числами (просмотры видео)
+      const viewNumbers = [];
+      const re = /(\d[\d\s]{2,})\s*\n/g;
+      let mm;
+      while ((mm = re.exec(block)) !== null) {
+        const v = parseInt(mm[1].replace(/\s/g, ''), 10);
+        if (v >= 100 && v <= 100_000_000) viewNumbers.push(v);
+      }
+      // Фильтруем короткие (лайки, комменты) — оставляем только крупные
+      const bigViews = viewNumbers.filter(v => v >= 500);
+      if (bigViews.length >= 3) {
+        // Берём среднее топ-5
+        const top = bigViews.slice(0, 5);
+        const avg = Math.round(top.reduce((a, b) => a + b, 0) / top.length);
+        result.viewsPerVideo = avg;
+        result.confidence.viewsPerVideo = true;
+      }
+    }
+
+    // Из блока "Самый популярный контент" (реальное время)
+    if (!result.viewsPerVideo) {
+      m = text.match(/Самый популярный контент\s*\n+Просмотры([\s\S]{100,2000}?)(?:Подробнее|$)/);
+      if (m) {
+        const block = m[1];
+        const re = /(\d[\d\s]{2,})\s*\n/g;
+        const nums = [];
+        let mm;
+        while ((mm = re.exec(block)) !== null) {
+          const v = parseInt(mm[1].replace(/\s/g, ''), 10);
+          if (v >= 500 && v <= 100_000_000) nums.push(v);
+        }
+        if (nums.length >= 2) {
+          result.viewsPerVideo = Math.round(nums.reduce((a, b) => a + b, 0) / nums.length);
+          result.confidence.viewsPerVideo = true;
+        }
+      }
+    }
+
+    // ============ ER (ВОВЛЕЧЁННОСТЬ) ============
+    // CTR или из "Отметки \"Нравится\"" в блоке нового контента
+    // 1) Прямой поиск ER
+    m = text.match(/(?:ER|Вовлечённость|Engagement)[^\n]*?(\d{1,2}[.,]\d)\s*%/i);
+    if (m) {
+      const v = parseFloat(m[1].replace(',', '.'));
+      if (v >= 0 && v <= 30) { result.engagement = v; result.confidence.engagement = true; }
+    }
+    // 2) CTR значков — как прокси
+    if (result.engagement === null) {
+      m = text.match(/CTR[^\n]*?(\d{1,2}[.,]\d)\s*%/i);
+      if (m) {
+        const v = parseFloat(m[1].replace(',', '.'));
+        if (v >= 0 && v <= 30) { result.engagement = v; result.confidence.engagement = 'proxy'; }
+      }
+    }
+    // 3) Из среднего процента просмотра и лайков
+    if (result.engagement === null) {
+      // "Отметки \"Нравится\"\n8\n" при 1.2 тыс просмотров
+      const likeMatch = text.match(/Отметки\s*"?Нравится"?\s*\n+\s*([\d\s.,]+)/i);
+      const viewsMatch = text.match(/Просмотры\s*\n+\s*([\d][\d\s.,]*\s*(?:тыс|млн)?)/);
+      if (likeMatch && viewsMatch) {
+        const likes = extractScaledNumber(likeMatch[1]);
+        const views = extractScaledNumber(viewsMatch[1]);
+        if (likes && views && views > 0) {
+          const er = (likes / views) * 100;
+          if (er > 0 && er < 30) {
+            result.engagement = Math.round(er * 10) / 10;
+            result.confidence.engagement = 'computed';
+          }
+        }
+      }
+    }
+
+    // ============ ЧАСТОТА ============
+    // "Опубликованный контент\nПоследние 28 дней\nShorts\n17\nВидео\n4\n..."
+    m = text.match(/Опубликованный контент\s*\n+Последние 28 дней([\s\S]{50,500}?)(?:Подробнее|Зрители|$)/);
+    if (m) {
+      const block = m[1];
+      const counts = [];
+      const re = /(?:Shorts|Видео|Прямые трансляции|Записи)\s*\n+\s*(\d{1,3})/g;
+      let mm;
+      while ((mm = re.exec(block)) !== null) {
+        counts.push(parseInt(mm[1], 10));
+      }
+      if (counts.length > 0) {
+        const total = counts.reduce((a, b) => a + b, 0);
+        if (total > 0 && total <= 60) {
+          result.frequency = total;
+          result.confidence.frequency = true;
+        }
+      }
+    }
+
+    // ============ НИША ============
+    // По ключевым словам в тексте видео
+    const nicheKeywords = {
+      gaming: ['майнкрафт', 'minecraft', 'игр', 'стрим', 'геймплей', 'мод', 'хардкор', 'выживание'],
+      tech: ['обзор', 'технолог', 'смартфон', 'компьютер', 'пк', 'fps', 'настройк', 'софт'],
+      education: ['урок', 'гайд', 'обучен', 'наук', 'школ', 'образован'],
+      finance: ['финанс', 'бизнес', 'деньг', 'доход', 'заработ', 'инвест'],
+      lifestyle: ['влог', 'жизн', 'день из жизни', 'лайфст'],
+      entertainment: ['челлендж', 'прикол', 'мем', 'развлеч', 'юмор', 'треш'],
+      music: ['музык', 'трек', 'песн', 'бит', 'ремикс'],
+      sport: ['спорт', 'фитнес', 'трениров', 'футбол'],
+      beauty: ['красот', 'макияж', 'мода', 'стил'],
+      food: ['еда', 'рецепт', 'готов', 'кулинар']
+    };
+    const lowerText = text.toLowerCase();
+    let bestNiche = null;
+    let bestScore = 0;
+    for (const [key, words] of Object.entries(nicheKeywords)) {
+      let score = 0;
+      for (const w of words) {
+        const re = new RegExp(w, 'gi');
+        const matches = lowerText.match(re);
+        if (matches) score += matches.length;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestNiche = key;
+      }
+    }
+    if (bestNiche && bestScore >= 2) {
+      result.niche = bestNiche;
+      result.confidence.niche = true;
+    }
+
+    // ============ ЛЕТ НА YOUTUBE ============
+    // "Дата регистрации: 2 мар. 2022 г."
+    const monthMap = {
+      'янв': 0, 'фев': 1, 'мар': 2, 'апр': 3, 'ма': 4, 'мая': 4, 'июн': 5,
+      'июл': 6, 'авг': 7, 'сен': 8, 'окт': 9, 'ноя': 10, 'дек': 11
+    };
+    m = text.match(/Дата регистрации[:\s]+(\d{1,2})\s+([а-яё]+)\.?\s+(\d{4})/i);
+    if (m) {
+      const day = parseInt(m[1], 10);
+      const monthKey = m[2].toLowerCase().slice(0, 3);
+      const year = parseInt(m[3], 10);
+      const month = monthMap[monthKey] !== undefined ? monthMap[monthKey] : 0;
+      const regDate = new Date(year, month, day);
+      const now = new Date();
+      const diffYears = (now - regDate) / (1000 * 60 * 60 * 24 * 365.25);
+      if (diffYears >= 0 && diffYears < 50) {
+        result.years = Math.round(diffYears * 2) / 2;
+        result.confidence.years = true;
+      }
+    }
+
+    // ============ МОНЕТИЗАЦИЯ ============
+    // "Расчетный доход\n—" -> Нет
+    // "Расчетный доход\n0,00 ₽" -> Нет
+    // Есть цифры > 0 -> Частичная/Полная
+    const revenueMatch = text.match(/Расчетный доход\s*\n+([^\n]+)/);
+    if (revenueMatch) {
+      const revLine = revenueMatch[1].trim();
+      if (revLine === '—' || /^0[.,]?0*\s*₽?$/.test(revLine)) {
+        result.monetization = 'none';
+      } else {
+        const rev = parseHumanNumber(revLine.replace('₽', '').trim());
+        if (rev && rev > 0) {
+          result.monetization = 'partial';
+        } else {
+          result.monetization = 'none';
+        }
+      }
+      // Проверка на "Полная" — если есть упоминания спонсоров/партнёрок
+      if (/спонсор|партнёр|брендов|интеграц/i.test(text)) {
+        result.monetization = 'full';
+      }
+      result.confidence.monetization = true;
+    } else {
+      // Если доход не найден — по умолчанию "none"
+      result.monetization = 'none';
+    }
+
+    return result;
+  }
+
+  // ============================
+  // Применение распознанных данных
+  // ============================
+  function applyParsedData(parsed) {
+    const filled = [];
+    const missing = [];
+
+    // Название
+    if (parsed.name) {
+      nameInput.value = parsed.name;
+      markAutofilled(nameInput);
+      filled.push('Название канала');
+    } else missing.push('Название канала');
+
+    // Подписчики
+    if (parsed.subs && parsed.subs > 0) {
+      subsInput.value = parsed.subs;
+      markAutofilled(subsInput);
+      filled.push('Подписчики');
+    } else missing.push('Подписчики');
+
+    // Просмотры
+    let viewsForField = parsed.viewsPerVideo || parsed.views28d;
+    if (viewsForField && viewsForField > 0) {
+      viewsInput.value = Math.round(viewsForField);
+      markAutofilled(viewsInput);
+      filled.push('Просмотры на видео' + (parsed.viewsPerVideo ? '' : ' (из общих за 28 дней)'));
+    } else missing.push('Просмотры');
+
+    // ER
+    if (parsed.engagement !== null && parsed.engagement !== undefined) {
+      let er = Math.max(0, Math.min(20, parsed.engagement));
+      // Округляем до 0.5 для слайдера
+      er = Math.round(er * 2) / 2;
+      engagementInput.value = er;
+      engagementValue.textContent = er + '%';
+      engagementInput.setAttribute('aria-valuenow', er);
+      filled.push('ER: ' + er + '%' + (parsed.confidence.engagement === 'proxy' ? ' (по CTR)' : ''));
+    } else missing.push('ER');
+
+    // Частота
+    if (parsed.frequency !== null && parsed.frequency !== undefined) {
+      frequencyInput.value = parsed.frequency;
+      markAutofilled(frequencyInput);
+      filled.push('Видео в месяц: ' + parsed.frequency);
+    } else missing.push('Видео в месяц');
+
+    // Ниша
+    if (parsed.niche) {
+      nicheSelect.value = parsed.niche;
+      markAutofilled(nicheSelect);
+      filled.push('Ниша: ' + parsed.niche);
+    } else missing.push('Ниша');
+
+    // Стаж
+    if (parsed.years !== null && parsed.years !== undefined) {
+      yearsInput.value = parsed.years;
+      markAutofilled(yearsInput);
+      filled.push('Лет на YouTube: ' + parsed.years);
+    } else missing.push('Лет на YouTube');
+
+    // Монетизация
+    if (parsed.monetization) {
+      monetizationSelect.value = parsed.monetization;
+      markAutofilled(monetizationSelect);
+      const monLabel = { none: 'Нет', partial: 'Частичная', full: 'Полная' }[parsed.monetization];
+      filled.push('Монетизация: ' + monLabel);
+    } else missing.push('Монетизация');
+
+    return { filled, missing };
+  }
+
+  // ============================
+  // Обновление превью
+  // ============================
+  function updatePreview(parsed) {
+    parsedPreview.classList.add('show');
+
+    const setVal = (el, value, formatted) => {
+      if (value !== null && value !== undefined && value !== '') {
+        el.textContent = formatted || value;
+        el.className = 'val found';
+      } else {
+        el.textContent = 'не найдено';
+        el.className = 'val missing';
+      }
+    };
+
+    setVal(pName, parsed.name);
+    setVal(pSubs, parsed.subs, parsed.subs ? numFmt.format(parsed.subs) : null);
+    setVal(pViews, parsed.views28d, parsed.views28d ? numFmt.format(parsed.views28d) + ' (за 28 дней)' : null);
+    setVal(pViewsPerVideo, parsed.viewsPerVideo, parsed.viewsPerVideo ? numFmt.format(parsed.viewsPerVideo) : null);
+    setVal(pEng, parsed.engagement, parsed.engagement !== null ? parsed.engagement + '%' : null);
+
+    const nicheLabel = parsed.niche ? {
+      lifestyle: 'Лайфстайл', gaming: 'Игры', tech: 'Технологии', education: 'Образование',
+      finance: 'Финансы', entertainment: 'Развлечения', music: 'Музыка', sport: 'Спорт',
+      beauty: 'Красота', food: 'Еда'
+    }[parsed.niche] : null;
+
+    setVal(pFreq, parsed.frequency, parsed.frequency !== null ? parsed.frequency + ' видео' : null);
+    setVal(pNiche, parsed.niche, nicheLabel);
+    setVal(pYears, parsed.years, parsed.years !== null ? parsed.years + ' лет' : null);
+
+    const monLabel = parsed.monetization ? { none: 'Нет', partial: 'Частичная', full: 'Полная' }[parsed.monetization] : null;
+    setVal(pMon, parsed.monetization, monLabel);
+  }
+
+  // ============================
+  // Обработка парсинга
+  // ============================
+  parseBtn.addEventListener('click', () => {
+    const raw = pasteArea.value.trim();
+    if (!raw) {
+      parseStatus.className = 'parse-status error show';
+      parseStatus.innerHTML = '<strong>Поле пустое.</strong> Скопируй текст из YouTube Аналитики и вставь его сюда.';
+      return;
+    }
+
+    if (raw.length < 30) {
+      parseStatus.className = 'parse-status warning show';
+      parseStatus.innerHTML = '<strong>Слишком короткий текст.</strong> Скопируй всю страницу Аналитики целиком (Ctrl+A → Ctrl+C).';
+      return;
+    }
+
+    const parsed = parseAnalyticsText(raw);
+    const { filled, missing } = applyParsedData(parsed);
+    updatePreview(parsed);
+
+    if (filled.length === 0) {
+      parseStatus.className = 'parse-status error show';
+      parseStatus.innerHTML = '<strong>Не удалось распознать данные.</strong> Убедись, что скопирован текст именно из YouTube Аналитики. Попробуй скопировать другую страницу (например, «Обзор» или «Аудитория»).';
+      return;
+    }
+
+    if (missing.length === 0) {
+      parseStatus.className = 'parse-status success show';
+      parseStatus.innerHTML = `<strong>Готово!</strong> Все поля заполнены автоматически. Проверь значения и нажми «Рассчитать стоимость».
+        <ul>${filled.map(f => '<li>' + f + '</li>').join('')}</ul>`;
+      showToast('Все данные распознаны!', 'fa-circle-check');
+    } else {
+      parseStatus.className = 'parse-status warning show';
+      parseStatus.innerHTML = `<strong>Частично распознано.</strong> Найдено: ${filled.length} из ${filled.length + missing.length}.
+        <ul>
+          ${filled.length ? '<li>✓ ' + filled.join('</li><li>✓ ') + '</li>' : ''}
+          ${missing.length ? '<li>✗ Не найдено: ' + missing.join(', ') + '</li>' : ''}
+        </ul>
+        <div style="margin-top:8px;">Заполни пропущенные поля вручную — подсказки рядом с каждым полем помогут.</div>`;
+      showToast('Часть данных распознана', 'fa-circle-info');
+    }
+
+    parseStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // Очистка поля вставки
+  clearPasteBtn.addEventListener('click', () => {
+    pasteArea.value = '';
+    parseStatus.className = 'parse-status';
+    parseStatus.innerHTML = '';
+    parsedPreview.classList.remove('show');
+    showToast('Поле очищено', 'fa-eraser');
+  });
+
+  // Drag & drop на textarea
+  pasteArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    pasteArea.classList.add('drag-over');
+  });
+  pasteArea.addEventListener('dragleave', () => {
+    pasteArea.classList.remove('drag-over');
+  });
+  pasteArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    pasteArea.classList.remove('drag-over');
+    const text = e.dataTransfer.getData('text');
+    if (text) {
+      pasteArea.value = text;
+      showToast('Текст вставлен — нажми «Распознать данные»', 'fa-clipboard-check');
+    }
+  });
+
+  // ============================
+  // Расчёт
+  // ============================
   const NICHE_WEIGHTS = {
     lifestyle:     { w: 0.7,  label: 'Лайфстайл' },
     gaming:        { w: 0.95, label: 'Игры' },
@@ -1340,7 +2067,7 @@
     resultContent.hidden = false;
 
     priceValue.textContent = fmt.format(result.total);
-    resultSub.textContent = `Канал «${data.name}» · ${data.subs.toLocaleString('ru-RU')} подписчиков · ${NICHE_WEIGHTS[data.niche].label}`;
+    resultSub.textContent = `Канал «${data.name}» · ${numFmt.format(data.subs)} подписчиков · ${NICHE_WEIGHTS[data.niche].label}`;
 
     const tier = getTier(result.total);
     tierBadge.textContent = 'Уровень: ' + tier.name;
@@ -1437,8 +2164,12 @@
     form.reset();
     engagementValue.textContent = '5%';
     engagementInput.setAttribute('aria-valuenow', '5');
+    pasteArea.value = '';
+    parseStatus.className = 'parse-status';
+    parseStatus.innerHTML = '';
+    parsedPreview.classList.remove('show');
     [nameInput, subsInput, viewsInput, frequencyInput, yearsInput].forEach((input) => {
-      input.classList.remove('invalid');
+      input.classList.remove('invalid', 'autofilled');
     });
     [nameError, subsError, viewsError, freqError, yearsError].forEach((el) => el.classList.remove('show'));
     placeholder.hidden = false;
@@ -1491,9 +2222,7 @@
           title: 'HairPrice — сколько стоит мой волос',
           text: message
         });
-      } catch (err) {
-        /* отменено пользователем */
-      }
+      } catch (err) { /* отменено пользователем */ }
     }
   });
 
@@ -1526,7 +2255,7 @@
       "name": "HairPrice",
       "alternateName": "Калькулятор стоимости волоса",
       "url": "https://timoshamoscow.github.io/hairprice/",
-      "description": "Онлайн-калькулятор, который оценивает стоимость волоса блогера по 8 параметрам YouTube-канала на основе данных YouTube Аналитики.",
+      "description": "Онлайн-калькулятор, который оценивает стоимость волоса блогера по 8 параметрам YouTube-канала. Поддерживает автопарсинг скопированного текста из YouTube Аналитики.",
       "applicationCategory": "EntertainmentApplication",
       "operatingSystem": "Any (Web)",
       "browserRequirements": "Requires JavaScript",
@@ -1534,9 +2263,9 @@
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" },
       "featureList": [
-        "Расчёт по 8 параметрам канала из YouTube Аналитики",
-        "Подсказки по каждому полю с указанием, где найти данные",
-        "Весовые коэффициенты по нишам",
+        "Автопарсинг данных из YouTube Аналитики",
+        "Распознавание подписчиков, просмотров, ER, частоты",
+        "Расчёт по 8 параметрам канала",
         "Разбивка цены по факторам",
         "Уровни каналов от Новичка до Легенды",
         "Кнопка «Поделиться» с копированием сообщения"
@@ -1558,17 +2287,17 @@
     },
     {
       "@type": "HowTo",
-      "name": "Как получить данные из YouTube Аналитики для расчёта стоимости волоса",
-      "totalTime": "PT5M",
+      "name": "Как получить данные из YouTube Аналитики для расчёта",
+      "totalTime": "PT3M",
       "step": [
         { "@type": "HowToStep", "position": 1, "name": "Открой Творческую студию", "text": "Перейди на studio.youtube.com и выбери нужный канал." },
-        { "@type": "HowToStep", "position": 2, "name": "Перейди в Аналитику", "text": "Открой вкладку Аналитика в левом меню Творческой студии." },
-        { "@type": "HowToStep", "position": 3, "name": "Узнай число подписчиков", "text": "Вкладка Аудитория — текущее количество подписчиков отображается в верхней части страницы." },
-        { "@type": "HowToStep", "position": 4, "name": "Посчитай средние просмотры", "text": "Вкладка Контент — посмотри просмотры последних 10–20 видео и раздели общее количество на их число." },
-        { "@type": "HowToStep", "position": 5, "name": "Определи ER", "text": "Вкладка Вовлечённость — сложи средние лайки и комментарии, раздели на средние просмотры и умножь на 100." },
-        { "@type": "HowToStep", "position": 6, "name": "Посчитай видео в месяц", "text": "В разделе Контент посчитай количество видео за последние 30 дней." },
-        { "@type": "HowToStep", "position": 7, "name": "Узнай стаж канала", "text": "Настройки → Канал → Расширенные настройки — там указана дата создания канала." },
-        { "@type": "HowToStep", "position": 8, "name": "Определи монетизацию", "text": "Раздел Монетизация — посмотри, какие источники дохода подключены." }
+        { "@type": "HowToStep", "position": 2, "name": "Перейди в Аналитику", "text": "Открой вкладку Аналитика в левом меню." },
+        { "@type": "HowToStep", "position": 3, "name": "Скопируй страницу Обзор", "text": "Ctrl+A → Ctrl+C — там подписчики, просмотры и расчётный доход." },
+        { "@type": "HowToStep", "position": 4, "name": "Скопируй страницу Аудитория", "text": "Тут текущее число подписчиков и зрители в месяц." },
+        { "@type": "HowToStep", "position": 5, "name": "Скопируй страницу Контент", "text": "Список всех видео — из него берутся средние просмотры и частота публикаций." },
+        { "@type": "HowToStep", "position": 6, "name": "Вставь текст в поле", "text": "Можно вставить несколько страниц подряд — алгоритм объединит данные." },
+        { "@type": "HowToStep", "position": 7, "name": "Нажми «Распознать данные»", "text": "Алгоритм извлечёт метрики и заполнит поля автоматически." },
+        { "@type": "HowToStep", "position": 8, "name": "Рассчитай стоимость", "text": "Проверь поля и нажми «Рассчитать стоимость»." }
       ]
     },
     {
@@ -1576,23 +2305,23 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Откуда брать данные для расчёта?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Все метрики берутся из YouTube Творческой студии → Аналитика. Наведи курсор на иконку рядом с полем — увидишь подсказку, где искать конкретное значение." }
+          "name": "Как работает автопарсинг данных?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ты копируешь текст со страницы YouTube Аналитики и вставляешь в поле. Алгоритм ищет по тексту знакомые метки и извлекает числа. Все данные обрабатываются локально в браузере." }
         },
         {
           "@type": "Question",
-          "name": "Почему нужно вводить так много данных?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Чем больше параметров — тем точнее оценка. Подписчики, просмотры, ER, ниша, стаж и монетизация дают полную картину канала." }
+          "name": "Что если не все поля распознались?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Проверь превью «Распознано из текста». Незаполненные поля можно ввести вручную — подсказки рядом с каждым полем подскажут, где их взять." }
         },
         {
           "@type": "Question",
-          "name": "Что делать, если у меня новый канал без аналитики?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Укажи приблизительные значения по уже опубликованным видео. Даже с минимальными данными расчёт будет корректным." }
+          "name": "С каких страниц Аналитики можно копировать текст?",
+          "acceptedAnswer": { "@type": "Answer", "text": "С любой — Обзор, Аудитория, Контент, Вовлечённость, Доход. Можно вставлять несколько страниц подряд." }
         },
         {
           "@type": "Question",
           "name": "Мои данные где-то сохраняются?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Нет. Все вычисления происходят локально в браузере." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Нет. Все вычисления и парсинг происходят локально в браузере." }
         },
         {
           "@type": "Question",
